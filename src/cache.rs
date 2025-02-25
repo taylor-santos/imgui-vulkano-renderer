@@ -1,13 +1,13 @@
 use std::{collections::HashMap, sync::Arc};
 
 use imgui::TextureId;
-use vulkano::descriptor_set::PersistentDescriptorSet;
+use vulkano::descriptor_set::DescriptorSet;
 
 #[derive(Default)]
 pub(crate) struct DescriptorSetCache {
-    cache: HashMap<TextureId, Arc<PersistentDescriptorSet>>,
+    cache: HashMap<TextureId, Arc<DescriptorSet>>,
 
-    font_texture: Option<Arc<PersistentDescriptorSet>>,
+    font_texture: Option<Arc<DescriptorSet>>,
 }
 
 impl DescriptorSetCache {
@@ -15,9 +15,9 @@ impl DescriptorSetCache {
         &mut self,
         texture_id: TextureId,
         creation_fn: F,
-    ) -> Result<Arc<PersistentDescriptorSet>, Box<dyn std::error::Error>>
+    ) -> Result<Arc<DescriptorSet>, Box<dyn std::error::Error>>
     where
-        F: FnOnce(TextureId) -> Result<Arc<PersistentDescriptorSet>, Box<dyn std::error::Error>>,
+        F: FnOnce(TextureId) -> Result<Arc<DescriptorSet>, Box<dyn std::error::Error>>,
     {
         if texture_id.id() == usize::MAX {
             if self.font_texture.is_none() {
